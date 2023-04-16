@@ -7,6 +7,7 @@ use App\Exceptions\ImageStorageStoreException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Str;
+use Ramsey\Uuid\Uuid;
 class LocalImageStorage implements ImageStorage
 {
 
@@ -19,12 +20,19 @@ class LocalImageStorage implements ImageStorage
      */
     public function store(UploadedFile $file): string
     {
-        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $file->getClientOriginalExtension();
 
-        // Generate a unique filename using original filename, timestamp and a random string
-        $filename = $originalFilename . '-' . time() . '-' . Str::random(8) . '.' . $extension;
+        // Generate a UUID v4
+        $uuid = Uuid::uuid4();
+
+        // Convert the UUID to a string and remove hyphens
+        $uuidString = str_replace('-', '', $uuid->toString());
+
+        // Generate the filename with the UUID
+        $filename = $uuidString . '.' . $extension;
+
         $path = 'images/' . $filename;
+
 
         $stored = Storage::disk('public')->put($path, file_get_contents($file));
         if (!$stored) {
