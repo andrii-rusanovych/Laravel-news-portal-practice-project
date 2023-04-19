@@ -42,6 +42,7 @@ class CreateTagsTable extends Migration
             $table->dropForeign(['news_id']);
         });
 
+
         Schema::dropIfExists('tags');
     }
 }

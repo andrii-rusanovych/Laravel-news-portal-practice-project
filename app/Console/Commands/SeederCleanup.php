@@ -2,8 +2,11 @@
 namespace App\Console\Commands;
 
 
+use App\Contracts\ReversibleSeeder;
 use Database\Seeders\NewsSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Console\Command;
+use PHPUnit\Util\Exception;
 
 class SeederCleanup extends Command
 {
@@ -12,8 +15,20 @@ class SeederCleanup extends Command
 
     public function handle()
     {
-        $seeder = new NewsSeeder();
-        $seeder->down();
+        $seeders = [
+            new NewsSeeder(),
+            new UserSeeder()
+        ];
+
+        foreach ($seeders as $seeder) {
+            if($seeder instanceof ReversibleSeeder) {
+                $seeder->down();
+            } else {
+                throw new Exception('Seeder '.$seeder.get_class().' not implement ReversibleSeeder interface, cannot call down() method');
+            }
+        }
+
+
 
         $this->info('Seeders cleaned up successfully!');
     }

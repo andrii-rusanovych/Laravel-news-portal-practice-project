@@ -19,4 +19,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::middleware('auth')->prefix('admin')->group(function (){
+    Route::resource('news', App\Http\Controllers\NewsController::class)->except([
+       'show'
+    ]);
+});
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -14,7 +14,7 @@ class NewsFactory extends Factory
         return [
             'title' => $this->faker->sentence,
             'body' => $this->faker->paragraphs(3, true),
-            'isActive' => $this->faker->boolean,
+            'is_active' => $this->faker->boolean,
             'created_at' => $this->faker->dateTimeBetween('-2 months', 'now'),
             'image_file_path' => null
         ];

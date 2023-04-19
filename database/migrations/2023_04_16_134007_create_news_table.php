@@ -28,7 +28,7 @@ class CreateNewsTable extends Migration
              **/
             $table->string('image_file_path', 50);
             $table->mediumText("body");
-            $table->boolean("isActive")->default(false);
+            $table->boolean("is_active")->default(false);
             $table->timestamp('created_at')->useCurrent();
         });
     }

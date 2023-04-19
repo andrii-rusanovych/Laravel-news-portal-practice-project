@@ -10768,3 +10768,9 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.news-form-image {
+  height: 200px;
+}
+.news-form-image__img {
+  max-height: 100%;
+}

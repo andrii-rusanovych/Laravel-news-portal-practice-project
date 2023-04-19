@@ -1,11 +1,24 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## Laravel Test Task
+#### [TinyEditor](https://www.tiny.cloud/) plugins used
+- anchor: Anchor - Insert anchors (also known as bookmarks) in your content to create internal links.
+- autolink: Autolink - Automatically create hyperlinks when typing URLs.
+- autoresize: Autoresize - Automatically resize the TinyMCE editor to fit the content.
+- charmap: Character Map - Insert special characters into the content.
+- code: Code - Edit the HTML source code of the content.
+- emoticons: Emoticons - Insert emoticons (smileys) into the content.
+- fullscreen: Full Screen - Toggle the TinyMCE editor to full-screen mode.
+- image: Image - Insert and manage images in the content.
+- link: Link - Add and manage hyperlinks in the content.
+- lists: Lists - Create and manage bulleted and numbered lists.
+- media: Media - Insert and manage HTML5 video and audio elements.
+- preview: Preview - Display a preview of the current content in a read-only format.
+- searchreplace: Search and Replace - Find and replace text within the content.
+- table: Table - Add and manage tables in the content.
+- visualblocks: Visual Blocks - Display block-level elements like paragraphs with visual cues.
+- visualchars: Visual Characters - Show invisible characters, such as non-breaking spaces and other whitespace.
+- wordcount: Word Count - Display a word count for the content.
+#### [TinyEditor plugins](https://www.tiny.cloud/docs/plugins/opensource/)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
 ## About Laravel
 

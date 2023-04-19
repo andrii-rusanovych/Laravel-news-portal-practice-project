@@ -2,14 +2,16 @@
 
 namespace Database\Seeders;
 
+use App;
+use App\Contracts\ReversibleSeeder;
 use App\Models\News;
 use App\Models\Tags;
+use App\Traits\UuidFileNameGenerator;
 use DB;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
-use App\Traits\UuidFileNameGenerator;
 
-class NewsSeeder extends Seeder
+class NewsSeeder extends Seeder implements ReversibleSeeder
 {
     use UuidFileNameGenerator;
     private const NUMBER_OF_NEWS = 20;
@@ -45,24 +47,32 @@ class NewsSeeder extends Seeder
 
     /**
      * Reverse the database seeds.
-     * Delete all attached images to news
+     * Delete all attached images to news in local and dev environments
+     * delete only associated images with news in testing environment
+     * not delete any image in production
      *
      * @return void
      */
     public function down()
     {
-        // Delete news images from the public disk
-        $news = News::all();
-        foreach ($news as $item) {
-            $imagePath = $item->image_file_path;
-            if ($imagePath && Storage::disk('public')->exists($imagePath)) {
-                Storage::disk('public')->delete($imagePath);
+
+        if (App::environment('local') || App::environment('development')) {
+            // Delete all images in the folder if in the local or development environment
+            Storage::disk('public')->deleteDirectory('images');
+        } else if (App::environment('testing')) {
+            // Delete only images associated with seeded news items if in testing
+            $news = News::all();
+            foreach ($news as $item) {
+                $imagePath = $item->image_file_path;
+                if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+                    Storage::disk('public')->delete($imagePath);
+                }
             }
         }
-
         // Delete all news and tags
         DB::table('tags')->delete();
         DB::table('news')->delete();
+
     }
 
     /**
