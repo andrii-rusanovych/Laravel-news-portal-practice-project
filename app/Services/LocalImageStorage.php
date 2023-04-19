@@ -6,10 +6,11 @@ use App\Exceptions\ImageStorageDeleteException;
 use App\Exceptions\ImageStorageStoreException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Str;
-use Ramsey\Uuid\Uuid;
+use App\Traits\UuidFileNameGenerator;
+
 class LocalImageStorage implements ImageStorage
 {
+    use UuidFileNameGenerator;
 
     /**
      * Store image (resource) in local file system
@@ -22,14 +23,7 @@ class LocalImageStorage implements ImageStorage
     {
         $extension = $file->getClientOriginalExtension();
 
-        // Generate a UUID v4
-        $uuid = Uuid::uuid4();
-
-        // Convert the UUID to a string and remove hyphens
-        $uuidString = str_replace('-', '', $uuid->toString());
-
-        // Generate the filename with the UUID
-        $filename = $uuidString . '.' . $extension;
+        $filename = $this->generateUUIDFileName($extension);
 
         $path = 'images/' . $filename;
 
@@ -49,12 +43,12 @@ class LocalImageStorage implements ImageStorage
      */
     public function getUrl(string $path): string
     {
-        return asset('storage/images/' . $path);
+        return Storage::url($path);
     }
 
     public function delete(string $path): void
     {
-        $deleted = Storage::disk('local')->delete($path);
+        $deleted = Storage::disk('public')->delete($path);
         if (!$deleted) {
             throw new ImageStorageDeleteException("Failed attempt delete image ". $path);
         }

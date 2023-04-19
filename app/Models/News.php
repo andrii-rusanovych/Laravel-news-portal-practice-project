@@ -12,6 +12,10 @@ class News extends Model
 
     public $timestamps = false;
 
+    protected $attributes = [
+        'isActive' => false,
+    ];
+
     public function tags(): HasMany
     {
         return $this->hasMany(Tags::class);

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Database\Seeders\NewsSeeder;
 
 class CreateTagsTable extends Migration
 {
@@ -32,6 +33,11 @@ class CreateTagsTable extends Migration
      */
     public function down()
     {
+        DB::transaction(function () {
+            $seeder = app()->make(NewsSeeder::class);
+            $seeder->down();
+        });
+
         Schema::table('tags', function (Blueprint $table) {
             $table->dropForeign(['news_id']);
         });
