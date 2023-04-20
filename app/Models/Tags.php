@@ -16,4 +16,8 @@ class Tags extends Model
     {
         return $this->belongsTo(News::class);
     }
+
+    protected $fillable = [
+        'tag'
+    ];
 }

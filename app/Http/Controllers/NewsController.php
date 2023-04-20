@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use ImageStorage;
 use App\Http\Requests\StoreNewsItemRequest;
 use App\Http\Requests\UpdateNewsItemRequest;
 use App\Models\News;
-//use Illuminate\Contracts\Foundation\Application;
-//use Illuminate\Contracts\View\Factory as ViewFactory;
+use App\Models\Tags;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -89,7 +88,39 @@ class NewsController extends Controller
      */
     public function update(UpdateNewsItemRequest $request, int $id)
     {
-        //
+        $newsItem = News::findOrFail($id);
+        $newsItem->title = $request->get('title');
+        $newsItem->body = $request->get('body');
+        $newsItem->is_active = filled($request->get('is_active'));
+
+        if($request->file('image')) {
+            $newsItem->image_file_path = ImageStorage::store($request->file('image'));
+        }
+
+        $submittedTags = array_map('trim', explode(',', $request->get('tags')));
+        $submittedTags = array_filter($submittedTags, function($tag) {
+            return !empty($tag);
+        });
+
+        // Fetch existing tags associated with the news item
+        $existingTags = $newsItem->tags->pluck('tag')->toArray();
+
+        // Identify tags to add and remove
+        $tagsToAdd = array_diff($submittedTags, $existingTags);
+        $tagsToRemove = array_diff($existingTags, $submittedTags);
+
+        // Delete the tags that were removed
+        Tags::query()->where('news_id', $id)->whereIn('tag', $tagsToRemove)->delete();
+
+        // Create and attach new tags
+        foreach ($tagsToAdd as $tag) {
+            $newTag = new Tags(['tag' => $tag]);
+            $newsItem->tags()->save($newTag);
+        }
+
+        $newsItem->update();
+
+        return Redirect::route('news.edit', ['news'=> $newsItem->id]);
     }
 
     /**

@@ -9,6 +9,7 @@ use App\Models\Tags;
 use App\Traits\UuidFileNameGenerator;
 use DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class NewsSeeder extends Seeder implements ReversibleSeeder
@@ -35,7 +36,8 @@ class NewsSeeder extends Seeder implements ReversibleSeeder
             $newsItem->save();
         }
 
-        $tags = Tags::factory()->count(100)->make();
+        $tags = Tags::factory()->count(100)->make()->unique('tag');
+
 
         foreach ($tags as $tag) {
             $randomNewsItem = News::query()->inRandomOrder()->first();
@@ -57,8 +59,12 @@ class NewsSeeder extends Seeder implements ReversibleSeeder
     {
 
         if (App::environment('local') || App::environment('development')) {
-            // Delete all images in the folder if in the local or development environment
-            Storage::disk('public')->deleteDirectory('images');
+            // Delete all files in the images folder
+            $imagesPath = storage_path('app/public/images');
+            $files = File::files($imagesPath);
+            foreach ($files as $file) {
+                File::delete($file);
+            }
         } else if (App::environment('testing')) {
             // Delete only images associated with seeded news items if in testing
             $news = News::all();

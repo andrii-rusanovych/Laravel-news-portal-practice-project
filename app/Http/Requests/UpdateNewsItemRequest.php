@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Helpers\DatabaseHelper;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\UniqueTagsForNewsItemRule;
 
-class UpdateNewsItemRequest extends FormRequest
+class UpdateNewsItemRequest extends NewsItemRequest
 {
     public function rules(): array
     {
@@ -15,7 +15,7 @@ class UpdateNewsItemRequest extends FormRequest
             'body' => "required|string|min:8|max:{$maxLengthForNewsArticleBody}",
             'image' => 'image|max:2048',
             'is_active' => 'boolean',
-            'tags' => 'string'
+            'tags' => ['string', new UniqueTagsForNewsItemRule($this->route('news'))],
         ];
     }
 }

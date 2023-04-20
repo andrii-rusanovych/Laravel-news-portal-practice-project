@@ -2,6 +2,13 @@
 
 @section('content')
 <div class="container">
+    <div class="row mb-3">
+        <div class="col-12 d-flex justify-content-center">
+            <h1>News list</h1>
+            <a href="{{ route('news.create') }}" class="btn btn-outline-dark btn-lg add-new-button">Add new</a>
+        </div>
+    </div>
+    <hr />
     <div class="row row-cols-xl-4 row-cols-lg-4 row-cols-md-6 row-cols-sm-6 g-4">
         @foreach($news as $newsItem)
             <div class="col">

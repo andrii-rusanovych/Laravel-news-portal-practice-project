@@ -13,70 +13,58 @@
 
         <div class="mb-3">
             <label for="newsTitle" class="from-label">Title</label>
-            <input type="text" name="title" class="form-control" id="newsTitle" value="{{ old('title',$newsItem->title) }}"  required minlength="8" maxlength="255">
-            <div class="invalid-feedback">
-               Article title should have length of 8 - 255 characters
-            </div>
-            @if ($errors->has('title'))
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->get('title') as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" id="newsTitle" value="{{ old('title',$newsItem->title) }}"  required minlength="8" maxlength="255">
+            @error('title')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
-        <div class="mb-3">
-            <div class="news-form-image">
-                <img src="{{ $newsItem->image_url }}" class="news-form-image__img" alt="Image for article">
-            </div>
-
-            <label class="form-label" for="imageForArticle">Image for Article</label>
-            <input type="file" accept="image/*" class="form-control" id="imageForArticle" name="image">
-            @if ($errors->has('image'))
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->get('image') as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+        <div class="row mb-3">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                <div class="news-form-image">
+                    <img src="{{ $newsItem->image_url }}" class="news-form-image__img" alt="Image for article">
                 </div>
-            @endif
+            </div>
+            <div class="col-xl-9 col-lg-8 col-md-6 col-sm-12">
+                <label class="form-label" for="imageForArticle">Image for Article</label>
+                <input type="file" accept="image/*"  class="form-control @error('image') is-invalid @enderror" id="imageForArticle" name="image">
+                @error('image')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
         </div>
         <div class="form-check mb-3 ">
-            <input class="form-check-input news-from-checkbox__input" type="checkbox" value="1"  name="is_active" id="isArticleActive" {{ old('is_active', $newsItem->is_active) ? 'checked' : '' }}>
-            <label for="isArticleActive" class="form-check-label news-from-checkbox__label">Show article for users</label>
-            @if ($errors->has('is_active'))
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->get('is_active') as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            <input class="form-check-input news-from-checkbox__input " type="checkbox" value="1"  name="is_active" id="isArticleActive" {{ old('is_active', $newsItem->is_active) ? 'checked' : '' }}>
+            <label for="isArticleActive" class="form-check-label news-from-checkbox__label">Show this article on the website</label>
         </div>
         <div class="mb-3">
             <label for="tagsList" class="form-label">Tags</label>
-            <textarea name="tags" id="tagsList" class="form-control" >{{ old('tags', $newsItem->tags_list) }}</textarea>
-        </div>
-        <div class="mb-3">
-            <label for="newsItemBody">Article content</label>
-            <textarea name="body" id="newsItemBody">{{ old('body' ,$newsItem->body) }}</textarea>
-            @if ($errors->has('body'))
-                <div class="alert alert-danger mb-3">
-                    <ul>
-                        @foreach ($errors->get('body') as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+            <textarea name="tags" id="tagsList" class="form-control @error('tags') is-invalid @enderror" >{{ old('tags', $newsItem->tags_list) }}</textarea>
+            @if($errors->has('tags'))
+                <div class="invalid-feedback">{{ $errors->first('tags') }}</div>
+            @else
+                <div class="form-text">
+                    Each tag must be unique across the entire website. Tags must be comma-separated (A tag is a word that, when found in another news article, is automatically turned into a hyperlink that points to that article.)
                 </div>
             @endif
-            <div class="invalid-feedback">
-                Article body should have minimum length of 10 characters
-            </div>
         </div>
+        <div class="mb-3 form-group">
+            <label for="newsItemBody">Article content</label>
+            <div class="{{ $errors->has('body') ? 'tinymce-error' : '' }}">
+                <textarea name="body" id="newsItemBody" class="form-control">{{ old('body' ,$newsItem->body) }}</textarea>
+            </div>
+            @error('body')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
+        </div>
+        @if ($errors->has('is_active'))
+            <div class="alert alert-danger mb-3">
+                <ul>
+                    @foreach ($errors->get('is_active') as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="mb-3">
             <button type="submit" class="btn btn-primary btn-lg">Update</button>
         </div>
@@ -90,11 +78,7 @@
         toolbar: 'undo redo | fontselect fontsizeselect | bold italic underline strikethrough | link image media table | align | numlist bullist | emoticons | removeformat | code fullscreen | searchreplace | charmap hr | visualblocks visualchars',
         tinycomments_mode: 'embedded',
         tinycomments_author: 'Author name',
-        mergetags_list: [
-            { value: 'First.Name', title: 'First Name' },
-            { value: 'Email', title: 'Email' },
-        ]
+        paste_data_images: true,
     });
-
 </script>
 @endsection

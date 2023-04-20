@@ -2,10 +2,10 @@
 namespace App\Http\Requests;
 
 use App\Helpers\DatabaseHelper;
-use Illuminate\Foundation\Http\FormRequest;
 
-class StoreNewsItemRequest extends FormRequest
+class StoreNewsItemRequest extends NewsItemRequest
 {
+
     public function rules(): array
     {
         $maxLengthForNewsArticleBody = DatabaseHelper::maxCharactersCountForMysqlMediumText();
