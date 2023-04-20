@@ -7,10 +7,25 @@
 @section('content')
 <div class="container">
     <h2 class="text-center">Edit article</h2>
-    <form action="{{ route('news.update', ['news' => $newsItem->id]) }}" method="POST">
+    <form action="{{ route('news.update', ['news' => $newsItem->id]) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <input type="hidden" name="_method" value="PUT">
+
         <div class="mb-3">
             <label for="newsTitle" class="from-label">Title</label>
-            <input type="text" name="title" class="form-control" id="newsTitle" value="{{$newsItem->title}}" >
+            <input type="text" name="title" class="form-control" id="newsTitle" value="{{ old('title',$newsItem->title) }}"  required minlength="8" maxlength="255">
+            <div class="invalid-feedback">
+               Article title should have length of 8 - 255 characters
+            </div>
+            @if ($errors->has('title'))
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->get('title') as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
         <div class="mb-3">
             <div class="news-form-image">
@@ -18,19 +33,52 @@
             </div>
 
             <label class="form-label" for="imageForArticle">Image for Article</label>
-            <input type="file" class="form-control" id="imageForArticle" name="image">
+            <input type="file" accept="image/*" class="form-control" id="imageForArticle" name="image">
+            @if ($errors->has('image'))
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->get('image') as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
-        <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" value="{{ $newsItem->is_active }}" name="is_active" id="isArticleActive">
-            <label for="isArticleActive" class="form-check-label">Show article for users</label>
+        <div class="form-check mb-3 ">
+            <input class="form-check-input news-from-checkbox__input" type="checkbox" value="1"  name="is_active" id="isArticleActive" {{ old('is_active', $newsItem->is_active) ? 'checked' : '' }}>
+            <label for="isArticleActive" class="form-check-label news-from-checkbox__label">Show article for users</label>
+            @if ($errors->has('is_active'))
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->get('is_active') as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
         <div class="mb-3">
             <label for="tagsList" class="form-label">Tags</label>
-            <textarea name="tags" id="tagsList" class="form-control">{{ $newsItem->tags_list }}</textarea>
+            <textarea name="tags" id="tagsList" class="form-control" >{{ old('tags', $newsItem->tags_list) }}</textarea>
         </div>
         <div class="mb-3">
             <label for="newsItemBody">Article content</label>
-            <textarea name="body" id="newsItemBody">{{ $newsItem->body }}</textarea>
+            <textarea name="body" id="newsItemBody">{{ old('body' ,$newsItem->body) }}</textarea>
+            @if ($errors->has('body'))
+                <div class="alert alert-danger mb-3">
+                    <ul>
+                        @foreach ($errors->get('body') as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <div class="invalid-feedback">
+                Article body should have minimum length of 10 characters
+            </div>
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary btn-lg">Update</button>
         </div>
     </form>
 </div>

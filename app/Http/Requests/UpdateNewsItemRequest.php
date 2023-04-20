@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Http\Requests;
 
 use App\Helpers\DatabaseHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreNewsItemRequest extends FormRequest
+class UpdateNewsItemRequest extends FormRequest
 {
     public function rules(): array
     {
@@ -12,7 +13,7 @@ class StoreNewsItemRequest extends FormRequest
         return [
             'title' => 'required|string|max:255|min:8',
             'body' => "required|string|min:8|max:{$maxLengthForNewsArticleBody}",
-            'image' => 'required|image|max:2048',
+            'image' => 'image|max:2048',
             'is_active' => 'boolean',
             'tags' => 'string'
         ];

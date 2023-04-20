@@ -5,3 +5,9 @@
         max-height: 100%;
     }
 }
+
+.news-from-checkbox{
+    &__input, &__label {
+        cursor: pointer;
+    }
+}

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Contracts\ReversibleSeeder;
 use App\Models\User;
 use DB;
+use Hash;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder implements ReversibleSeeder
@@ -14,7 +15,7 @@ class UserSeeder extends Seeder implements ReversibleSeeder
         User::create([
             'name' => config('seeder.user_name'),
             'email' => config('seeder.user_email'),
-            'password' => config('seeder.user_password')
+            'password' => Hash::make(config('seeder.user_password'))
         ]);
     }
 

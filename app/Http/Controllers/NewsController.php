@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreNewsItemRequest;
+use App\Http\Requests\UpdateNewsItemRequest;
 use App\Models\News;
 //use Illuminate\Contracts\Foundation\Application;
 //use Illuminate\Contracts\View\Factory as ViewFactory;
@@ -82,11 +83,11 @@ class NewsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  HttpRequest  $request
+     * @param  UpdateNewsItemRequest  $request
      * @param int $id
-     * @return HttpResponse
+     * @return RedirectResponse
      */
-    public function update(HttpRequest $request, int $id)
+    public function update(UpdateNewsItemRequest $request, int $id)
     {
         //
     }

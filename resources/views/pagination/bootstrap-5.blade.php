@@ -1,3 +1,4 @@
+{{--GPT4 generated file--}}
 @if ($paginator->hasPages())
     <nav aria-label="Page navigation">
         <ul class="pagination">
