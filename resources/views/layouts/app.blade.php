@@ -25,18 +25,38 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
+                @if($isAdminRoute)
+                    <a class="navbar-brand" href="{{ route('admin.news.index') }}">
+                        {{ config('app.name', 'Laravel') }} | Admin Panel
+                    </a>
+                @else
+                    <a class="navbar-brand" href="{{ route('public.news.index') }}">
+                        {{ config('app.name', 'Laravel') }}
+                    </a>
+                @endif
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a href="{{ route('news.index') }}" class="nav-link">News</a></li>
-                    </ul>
+                    @guest
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item"><a href="{{ route('public.news.index') }}" class="nav-link">News</a></li>
+                        </ul>
+                    @else
+                        @if ($isAdminRoute)
+                            <ul class="navbar-nav me-auto">
+                                <li class="nav-item"><a href="{{ route('admin.news.index') }}" class="nav-link">News</a></li>
+                                <li class="nav-item"><a href="{{ route('public.news.index') }}" class="nav-link">User Section</a></li>
+                            </ul>
+                        @else
+                            <ul class="navbar-nav me-auto">
+                                <li class="nav-item"><a href="{{ route('public.news.index') }}" class="nav-link">News</a></li>
+                                <li class="nav-item"><a href="{{ route('admin.news.index') }}" class="nav-link">Go to admin panel</a></li>
+                            </ul>
+                        @endif
+                    @endguest
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">

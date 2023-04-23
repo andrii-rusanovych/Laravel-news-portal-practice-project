@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Carbon;
 use ImageStorage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,12 @@ class News extends Model
         'is_active' => false,
     ];
 
+    protected $fillable = [
+        'title',
+        'body',
+        'is_active'
+    ];
+
     public function tags(): HasMany
     {
         return $this->hasMany(Tags::class);
@@ -30,5 +37,10 @@ class News extends Model
     {
         $tags = $this->tags->pluck('tag')->toArray();
         return implode(', ', $tags);
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value);
     }
 }

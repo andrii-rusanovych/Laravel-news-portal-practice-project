@@ -1,13 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.news_form')
 
-@section('head')
-    <script src="https://cdn.tiny.cloud/1/asp4o3ypemkuhbybzd8iv80vklbkrqdfzictiksq03k71pnd/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-@endsection
-
-@section('content')
-<div class="container">
+@section('news_form')
     <h2 class="text-center">Edit article</h2>
-    <form action="{{ route('news.update', ['news' => $newsItem->id]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.news.update', ['news' => $newsItem->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="_method" value="PUT">
 
@@ -48,9 +43,9 @@
             @endif
         </div>
         <div class="mb-3 form-group">
-            <label for="newsItemBody">Article content</label>
+            <label for="tinymceRichText">Article content</label>
             <div class="{{ $errors->has('body') ? 'tinymce-error' : '' }}">
-                <textarea name="body" id="newsItemBody" class="form-control">{{ old('body' ,$newsItem->body) }}</textarea>
+                <textarea name="body" id="tinymceRichText" class="form-control">{{ old('body' ,$newsItem->body) }}</textarea>
             </div>
             @error('body')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -67,18 +62,37 @@
         @endif
         <div class="mb-3">
             <button type="submit" class="btn btn-primary btn-lg">Update</button>
+            <button type="button" class="btn btn-danger news-form-delete-btn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                Delete News Item
+            </button>
         </div>
     </form>
-</div>
+    <form action="{{ route('admin.news.destroy',['news' => $newsItem->id]) }}" method="POST" id="delete-form">
+        @csrf
+        @method('DELETE')
+        <!-- Other form fields here -->
+    </form>
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this news item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<script>
-    tinymce.init({
-        selector: '#newsItemBody',
-        plugins: 'anchor autolink autoresize charmap code emoticons fullscreen image link lists media preview searchreplace table visualblocks visualchars wordcount',
-        toolbar: 'undo redo | fontselect fontsizeselect | bold italic underline strikethrough | link image media table | align | numlist bullist | emoticons | removeformat | code fullscreen | searchreplace | charmap hr | visualblocks visualchars',
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name',
-        paste_data_images: true,
-    });
-</script>
+    <script>
+        document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+            document.getElementById('delete-form').submit();
+        });
+    </script>
 @endsection

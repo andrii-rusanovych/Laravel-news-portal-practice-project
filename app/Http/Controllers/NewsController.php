@@ -22,7 +22,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::paginate(8);
+        $news = News::orderBy('created_at', 'desc')->paginate(8);
         return view('news.index')->with(['news' => $news]);
     }
 
@@ -44,27 +44,21 @@ class NewsController extends Controller
      */
     public function store(StoreNewsItemRequest $request)
     {
-        $newsItem = new News();
-        $newsItem->title = $request->get('title');
-        $newsItem->body = $request->get('body');
-        $newsItem->is_active = $request->get('is_active');
+        $newsItem = new News([
+            'title' => $request->get('title'),
+            'body' => $request->get('body'),
+            'is_active' => $request->filled('is_active')
+        ]);
 
         $newsItem->image_file_path = ImageStorage::store($request->file('image'));
 
         $newsItem->save();
 
-        return Redirect::route('news.edit', ['news'=> $newsItem->id]);
-    }
+        $submittedTags = $this->getSubmittedTags($request->get('tags'));
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return HttpResponse
-     */
-    public function show(int $id)
-    {
-        //
+        $this->createAndAttachTags($newsItem, $submittedTags);
+
+        return Redirect::route('admin.news.edit', ['news'=> $newsItem->id]);
     }
 
     /**
@@ -91,46 +85,64 @@ class NewsController extends Controller
         $newsItem = News::findOrFail($id);
         $newsItem->title = $request->get('title');
         $newsItem->body = $request->get('body');
-        $newsItem->is_active = filled($request->get('is_active'));
+        $newsItem->is_active = $request->filled('is_active');
 
         if($request->file('image')) {
             $newsItem->image_file_path = ImageStorage::store($request->file('image'));
         }
 
-        $submittedTags = array_map('trim', explode(',', $request->get('tags')));
-        $submittedTags = array_filter($submittedTags, function($tag) {
-            return !empty($tag);
-        });
+        $submittedTags = $this->getSubmittedTags($request->get('tags'));
 
-        // Fetch existing tags associated with the news item
-        $existingTags = $newsItem->tags->pluck('tag')->toArray();
-
-        // Identify tags to add and remove
-        $tagsToAdd = array_diff($submittedTags, $existingTags);
-        $tagsToRemove = array_diff($existingTags, $submittedTags);
-
-        // Delete the tags that were removed
-        Tags::query()->where('news_id', $id)->whereIn('tag', $tagsToRemove)->delete();
-
-        // Create and attach new tags
-        foreach ($tagsToAdd as $tag) {
-            $newTag = new Tags(['tag' => $tag]);
-            $newsItem->tags()->save($newTag);
-        }
+        $this->updateNewsItemTags($newsItem, $submittedTags);
 
         $newsItem->update();
 
-        return Redirect::route('news.edit', ['news'=> $newsItem->id]);
+        return Redirect::route('admin.news.edit', ['news'=> $newsItem->id]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return HttpResponse
+     * @param  News $news
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(News $news)
     {
-        //
+        $news->delete();
+
+        return redirect()->route('admin.news.index');
+    }
+
+    private function getSubmittedTags(?string $tagsString): array
+    {
+        // Return an empty array if tagsString is null or empty
+        if (is_null($tagsString) || trim($tagsString) === '') {
+            return [];
+        }
+
+        $submittedTags = array_map('trim', explode(',', $tagsString));
+        return array_filter($submittedTags, function($tag) {
+            return !empty($tag);
+        });
+    }
+
+    private function createAndAttachTags(News $newsItem, array $tags): void
+    {
+        foreach ($tags as $tag) {
+            $newTag = new Tags(['tag' => $tag]);
+            $newsItem->tags()->save($newTag);
+        }
+    }
+
+    private function updateNewsItemTags(News $newsItem, array $submittedTags): void
+    {
+        $existingTags = $newsItem->tags()->pluck('tag')->toArray();
+
+        $tagsToAdd = array_diff($submittedTags, $existingTags);
+        $tagsToRemove = array_diff($existingTags, $submittedTags);
+
+        Tags::query()->where('news_id', $newsItem->id)->whereIn('tag', $tagsToRemove)->delete();
+
+        $this->createAndAttachTags($newsItem, $tagsToAdd);
     }
 }

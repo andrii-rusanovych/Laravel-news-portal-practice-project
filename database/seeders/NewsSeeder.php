@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Storage;
 class NewsSeeder extends Seeder implements ReversibleSeeder
 {
     use UuidFileNameGenerator;
-    private const NUMBER_OF_NEWS = 20;
+    private const NUMBER_OF_NEWS = 50;
+
+    private const MAXIMUM_NUMBER_OF_TAGS = 300;
 
     private const BASE_IMAGE_PATH_NAME = 'news_image_for_seeder';
     private const BASE_IMAGE_PATH_EXTENSION = 'jpg';
@@ -36,7 +38,7 @@ class NewsSeeder extends Seeder implements ReversibleSeeder
             $newsItem->save();
         }
 
-        $tags = Tags::factory()->count(100)->make()->unique('tag');
+        $tags = Tags::factory()->count(self::MAXIMUM_NUMBER_OF_TAGS)->make()->unique('tag');
 
 
         foreach ($tags as $tag) {

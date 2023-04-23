@@ -5,7 +5,7 @@
     <div class="row mb-3">
         <div class="col-12 d-flex justify-content-center">
             <h1>News list</h1>
-            <a href="{{ route('news.create') }}" class="btn btn-outline-dark btn-lg add-new-button">Add new</a>
+            <a href="{{ route('admin.news.create') }}" class="btn btn-outline-dark btn-lg add-new-button">Add new</a>
         </div>
     </div>
     <hr />
@@ -16,9 +16,10 @@
                     <img src="{{$newsItem->image_url}}" alt="" class="card-img-top img-fluid">
                     <div class="card-body">
                         <h5 class="card-title">{{ $newsItem->title }}</h5>
+                        <p class="card-text">Posted at {{ $newsItem->created_at->format('Y/m/d H:i') }}</p>
                     </div>
                     <div class="card-footer">
-                        <a href="{{ route('news.edit', ['news'=>$newsItem->id]) }}" class="btn btn-primary" >Edit</a>
+                        <a href="{{ route('admin.news.edit', ['news'=>$newsItem->id]) }}" class="btn btn-primary" >Edit</a>
                     </div>
                 </div>
             </div>
@@ -30,5 +31,4 @@
         </div>
     </div>
 </div>
-    <div class="container"></div>
 @endsection

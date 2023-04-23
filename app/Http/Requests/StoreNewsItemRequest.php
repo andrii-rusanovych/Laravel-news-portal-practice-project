@@ -2,6 +2,7 @@
 namespace App\Http\Requests;
 
 use App\Helpers\DatabaseHelper;
+use App\Rules\UniqueTagsForNewsItemRule;
 
 class StoreNewsItemRequest extends NewsItemRequest
 {
@@ -14,7 +15,7 @@ class StoreNewsItemRequest extends NewsItemRequest
             'body' => "required|string|min:8|max:{$maxLengthForNewsArticleBody}",
             'image' => 'required|image|max:2048',
             'is_active' => 'boolean',
-            'tags' => 'string'
+            'tags' => ['nullable', 'string', new UniqueTagsForNewsItemRule()],
         ];
     }
 }

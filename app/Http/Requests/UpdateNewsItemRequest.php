@@ -15,7 +15,7 @@ class UpdateNewsItemRequest extends NewsItemRequest
             'body' => "required|string|min:8|max:{$maxLengthForNewsArticleBody}",
             'image' => 'image|max:2048',
             'is_active' => 'boolean',
-            'tags' => ['string', new UniqueTagsForNewsItemRule($this->route('news'))],
+            'tags' => ['nullable','string',new UniqueTagsForNewsItemRule($this->route('news'))],
         ];
     }
 }

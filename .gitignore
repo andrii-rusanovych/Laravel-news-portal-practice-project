@@ -16,5 +16,6 @@ yarn-error.log
 
 /public/css/app.css
 /public/js/app.js
+/public/js/tinymce/*
 
 _ide_helper.php
