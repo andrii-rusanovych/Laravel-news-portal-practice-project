@@ -5,7 +5,8 @@
 - enabled ext-dom php extension
 
 ### Instalation required steps
-- run npm run dev
+- run composer install
+- run php artisan key:generate
 - run php artisan migrate --seed
 
 ### Aditional steps
