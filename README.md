@@ -1,5 +1,5 @@
 ## Laravel News Portal Practice Project
-# This repository contains a Laravel-based project I worked on to enhance my skills. It's a news portal with two components:
+### This repository contains a Laravel-based project I worked on to enhance my skills. It's a news portal with two components:
 1. Admin Panel:
   * Authentication for admin access.
   * Ability to add, edit, and delete news articles.
