@@ -1,4 +1,11 @@
 ## Laravel News Portal Practice Project
+
+### Project Details
+
+- **Development Time:** This project was initially developed in a week to demonstrate my skills.
+- **Readme Enhancements:** I've made improvements to the README to ensure clarity and ease of setup for anyone interested in this project.
+- **Git Fixes:** I've also addressed issues with Git-related files to make it more accessible for others to fetch and set up the project as expected.
+
 ### This repository contains a Laravel-based project I worked on to enhance my skills. It's a news portal with two components:
 1. Admin Panel:
   * Authentication for admin access.
