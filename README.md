@@ -1,5 +1,10 @@
-## Laravel Test Task
-
+## Laravel News Portal Practice Project
+# This repository contains a Laravel-based project I worked on to enhance my skills. It's a news portal with two components:
+1. Admin Panel:
+  * Authentication for admin access.
+  * Ability to add, edit, and delete news articles.
+2. Mini Website:
+  * The main page displays a list of active news articles with titles, photos, and creation dates.
 ## Requirements
 - PHP 7.4
 - enabled ext-dom php extension
