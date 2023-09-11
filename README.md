@@ -3,8 +3,13 @@
 1. Admin Panel:
   * Authentication for admin access.
   * Ability to add, edit, and delete news articles.
+  * News article details include title, photo, tags, text, creation date, and activity status.
 2. Mini Website:
   * The main page displays a list of active news articles with titles, photos, and creation dates.
+  * Individual news article pages with breadcrumbs, title, creation date, photo, and text.
+  * Pagination for news articles.
+  * Sorting of news articles by creation date.
+  * Navigation buttons for previous and next articles.
 ## Requirements
 - PHP 7.4
 - enabled ext-dom php extension
