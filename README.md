@@ -10,6 +10,13 @@
   * Pagination for news articles.
   * Sorting of news articles by creation date.
   * Navigation buttons for previous and next articles.
+
+#### Tag Handling:
+- When adding tags to an article, if the tag already exists in other articles, a validation error message is displayed in the admin panel to ensure tag uniqueness.
+- Tags are automatically wrapped into <a> HTML tags in the article text to create clickable links.
+- Custom links within the rich text of articles are preserved and not replaced, even if they match the tag name.
+- The system intelligently manages tag replacements to avoid unintended changes, especially within custom links or special cases.
+
 ## Requirements
 - PHP 7.4
 - enabled ext-dom php extension
