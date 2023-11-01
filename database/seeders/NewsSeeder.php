@@ -91,6 +91,9 @@ class NewsSeeder extends Seeder implements ReversibleSeeder
      */
     private function getNewCopiedImagePath(): string
     {
+
+        $this->createPublicImagesDirIfNotPresent();
+
         $baseImagePath = 'seed/source_images/'.self::BASE_IMAGE_PATH_NAME.'.'.self::BASE_IMAGE_PATH_EXTENSION;
 
         // Copy the base image, rename it, and save it to the public disk
@@ -99,5 +102,19 @@ class NewsSeeder extends Seeder implements ReversibleSeeder
         File::copy(database_path($baseImagePath), storage_path('app/public/images/'.$newImageName));
 
         return 'images/' . $newImageName;
+    }
+
+    /**
+     * Check if dir - storage/app/public/seed/source_images/ exist
+     * if not create one
+     *
+     * @return void
+     */
+    private function createPublicImagesDirIfNotPresent() {
+        $directoryPath = storage_path('app/public/images');
+
+        if (!Storage::exists($directoryPath)) {
+            Storage::makeDirectory($directoryPath);
+        }
     }
 }
